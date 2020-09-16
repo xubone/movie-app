@@ -13,7 +13,7 @@ type Movies = {
 type SearchState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "success"; data: Movies } // todo: specify the data type too
+  | { status: "success"; data: Movies[] } // todo: specify the data type too
   | { status: "error"; error: ApiResult };
 
 export default function DiscoverMoviesPage() {
@@ -52,7 +52,17 @@ export default function DiscoverMoviesPage() {
         <input value={searchText} onChange={(e) => setSearchText(e.target.value)} />
         <button onClick={search}>Search</button>
       </p>
-      <p>{searchState.status}</p>
+      <p>
+        {searchState.status === "success"
+          ? searchState.data.map((movie) => {
+              return (
+                <p>
+                  {movie.title}- {movie.year}
+                </p>
+              );
+            })
+          : searchState.status}
+      </p>
     </div>
   );
 }
