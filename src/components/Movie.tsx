@@ -1,15 +1,30 @@
 import React from "react";
-import { TMovies, TMovieType } from "../types/movie";
+import { TMovie, TMovieType } from "../types/TMovie";
 
 type Props = {
-  movie: TMovies;
+  movie: TMovie;
 };
-export default function Movie(props: Props) {
+export default function Movie({ movie }: Props) {
   return (
-    <div key={props.movie.imdbID}>
-      {props.movie.Title}- {props.movie.Year} - {props.movie.Type}
+    <div
+      style={{
+        width: "25%",
+        padding: "10px",
+        boxSizing: "border-box",
+      }}
+    >
       <div>
-        <img src={props.movie.Poster}></img>
+        <strong>{movie.Title}</strong> - {movie.Year}
+      </div>
+      <div>
+        <img
+          src={movie.Poster}
+          alt={movie.Title}
+          style={{
+            display: "block",
+            maxWidth: "100%",
+          }}
+        />
       </div>
     </div>
   );

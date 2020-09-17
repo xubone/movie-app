@@ -2,60 +2,56 @@ import React, { useState } from "react";
 import axios from "axios";
 import Movie from "../components/Movie";
 
-import { TMovies, TMovieType } from "../types/movie";
-
-type ApiResult =
-  | {
-      Response: "False";
-      Error: string;
-    }
-  | { Response: "True"; Search: TMovies[]; TotalResults: string };
-
-type SearchState =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: TMovies[] } // todo: specify the data type too
-  | { status: "error"; error: ApiResult };
+import { TMovie, TMovieType } from "../types/TMovie";
+import { TSearchState, ProcessStatus } from "../types/TSearchState";
+import { TApiResult } from "../types/TApiResult";
 
 export default function DiscoverMoviesPage() {
   const [searchText, setSearchText] = useState("");
-  const [searchState, setSearchState] = useState<SearchState>({ status: "idle" });
+  const [state, setSearchState] = useState<TSearchState>({ status: ProcessStatus.idle });
 
   const search = async () => {
-    setSearchState({ status: "loading" });
+    setSearchState({ status: ProcessStatus.loading });
     const apikey = "fad16781";
     const queryParam = encodeURIComponent(searchText);
 
     const apiResult = await axios.get(`https://omdbapi.com/?apikey=${apikey}&s=${queryParam}`);
-
-    console.log(apiResult.data);
-    const result: ApiResult = apiResult.data;
+    const result: TApiResult = apiResult.data;
 
     if (result.Response === "False") {
-      console.log("Fout!");
-      setSearchState({ status: "error", error: result });
+      setSearchState({ status: ProcessStatus.error, error: result });
     } else {
-      console.log("succes!");
       setSearchState({
-        status: "success",
+        status: ProcessStatus.success,
         data: result.Search,
       });
     }
   };
   return (
-    <div>
+    <div style={{ margin: "20px" }}>
       <h1>Discover some movies!</h1>
       <p>
         <input value={searchText} onChange={(e) => setSearchText(e.target.value)} />
         <button onClick={search}>Search</button>
       </p>
-      <p>
-        {searchState.status === "success"
-          ? searchState.data.map((movie) => {
-              return <Movie movie={movie} />;
-            })
-          : searchState.status}
-      </p>
+      {state.status === ProcessStatus.loading && <p>Searching...</p>}
+      {state.status === ProcessStatus.error && <p> :( ...</p>}
+      {state.status === ProcessStatus.success && (
+        <div>
+          <h2>Search results</h2>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              margin: "0 -10px",
+            }}
+          >
+            {state.data.map((movie) => {
+              return <Movie key={movie.imdbID} movie={movie} />;
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
