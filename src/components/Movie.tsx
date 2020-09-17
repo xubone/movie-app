@@ -1,5 +1,5 @@
 import React from "react";
-import { TMovie, TMovieType } from "../types/TMovie";
+import { TMovie } from "../types/TMovie";
 
 type Props = {
   movie: TMovie;

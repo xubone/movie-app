@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import Movie from "../components/Movie";
 
-import { TMovie, TMovieType } from "../types/TMovie";
 import { TSearchState, ProcessStatus } from "../types/TSearchState";
 import { TApiResult } from "../types/TApiResult";
 
