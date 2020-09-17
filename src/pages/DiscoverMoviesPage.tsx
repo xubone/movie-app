@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 import Movie from "../components/Movie";
 
 import { TSearchState, ProcessStatus } from "../types/TSearchState";
-import { TApiResult } from "../types/TApiResult";
+import { SearchMovieResults } from "../services/OmdbService";
 
 export default function DiscoverMoviesPage() {
   const [searchText, setSearchText] = useState("");
@@ -11,14 +11,11 @@ export default function DiscoverMoviesPage() {
 
   const search = async () => {
     setSearchState({ status: ProcessStatus.loading });
-    const apikey = "fad16781";
-    const queryParam = encodeURIComponent(searchText);
 
-    const apiResult = await axios.get(`https://omdbapi.com/?apikey=${apikey}&s=${queryParam}`);
-    const result: TApiResult = apiResult.data;
+    const result = await SearchMovieResults(searchText);
 
     if (result.Response === "False") {
-      setSearchState({ status: ProcessStatus.error, error: result });
+      setSearchState({ status: ProcessStatus.error, error: result.Response });
     } else {
       setSearchState({
         status: ProcessStatus.success,

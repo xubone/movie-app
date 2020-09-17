@@ -23,7 +23,7 @@ export type TMovieData = {
   Production: string;
   Rated: string;
   Released: string;
-  Response: string;
+  Response: "True";
   RunTime: string;
   Title: string;
   Type: string;

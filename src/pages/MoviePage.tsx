@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TMovieSearchState, ProcessStatus } from "../types/TSearchState";
-import { TApiResult } from "../types/TApiResult";
-import axios from "axios";
+import { GetMovieById } from "../services/OmdbService";
 
 export default function MoviePage() {
   const routeParams = useParams<{ imdbID: string }>();
@@ -11,19 +10,17 @@ export default function MoviePage() {
   useEffect(() => {
     async function fetchData() {
       setSearchState({ status: ProcessStatus.loading });
-      const apikey = "fad16781";
-      const queryParam = routeParams.imdbID;
 
-      const apiResult = await axios.get(`https://omdbapi.com/?apikey=${apikey}&i=${queryParam}`);
-      const result: TApiResult = apiResult.data;
-      console.log("data", result);
-      console.log("abc", result.Response);
+      const movieId = routeParams.imdbID;
+
+      const result = await GetMovieById(movieId);
+
       if (result.Response === "False") {
         console.log("Movie not found");
-        setSearchState({ status: ProcessStatus.error, error: result });
+        setSearchState({ status: ProcessStatus.error, error: result.Error });
       } else {
         console.log("Movie found!");
-        setSearchState({ status: ProcessStatus.success, data: apiResult.data });
+        setSearchState({ status: ProcessStatus.success, data: result });
       }
     }
     fetchData();
