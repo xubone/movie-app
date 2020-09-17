@@ -30,8 +30,9 @@ export default function DiscoverMoviesPage() {
         });
       }
     }
-
-    search();
+    if (routeParams.searchText !== undefined) {
+      search();
+    }
   }, [routeParams.searchText]);
 
   return (
