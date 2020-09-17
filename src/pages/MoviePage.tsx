@@ -19,7 +19,6 @@ export default function MoviePage() {
         console.log("Movie not found");
         setSearchState({ status: ProcessStatus.error, error: result.Error });
       } else {
-        console.log("Movie found!");
         setSearchState({ status: ProcessStatus.success, data: result });
       }
     }
