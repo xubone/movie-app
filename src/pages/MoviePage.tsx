@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TMovieSearchState, ProcessStatus } from "../types/TSearchState";
 import { TApiResult } from "../types/TApiResult";
-import { TMovieData } from "../types/TMovie";
 import axios from "axios";
 
 export default function MoviePage() {
   const routeParams = useParams<{ imdbID: string }>();
-  const [movieData, setMovieData] = useState<TMovieData>();
   const [state, setSearchState] = useState<TMovieSearchState>({ status: ProcessStatus.idle });
 
   useEffect(() => {
