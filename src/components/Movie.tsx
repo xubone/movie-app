@@ -1,6 +1,6 @@
 import React from "react";
 import { TMovie } from "../types/TMovie";
-
+import { Link } from "react-router-dom";
 type Props = {
   movie: TMovie;
 };
@@ -14,7 +14,9 @@ export default function Movie({ movie }: Props) {
       }}
     >
       <div>
-        <strong>{movie.Title}</strong> - {movie.Year}
+        <Link to={`/movie/${movie.imdbID}`}>
+          <strong>{movie.Title}</strong> - {movie.Year}
+        </Link>
       </div>
       <div>
         <img
