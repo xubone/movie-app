@@ -8,16 +8,13 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-export async function SearchMovieResults(searchText: string): Promise<TApiSearchResult> {
-  const queryParam = encodeURIComponent(searchText);
-
-  const apiResponse = await instance.get(`?apikey=${apikey}&s=${queryParam}`);
-  const result: TApiSearchResult = apiResponse.data;
+async function GetApiResult<T>(apiType: string, queryParam: string): Promise<T> {
+  const apiResponse = await instance.get(`?apikey=${apikey}&${apiType}=${queryParam}`);
+  const result: T = apiResponse.data;
   return result;
 }
 
-export async function GetMovieById(imdbID: string): Promise<TApiSingleResult> {
-  const apiResponse = await instance.get(`?apikey=${apikey}&i=${imdbID}`);
-  const result: TApiSingleResult = apiResponse.data;
-  return result;
-}
+export const SearchMovieResults = (searchText: string) =>
+  GetApiResult<TApiSearchResult>("s", searchText);
+
+export const GetMovieById = (movieId: string) => GetApiResult<TApiSingleResult>("i", movieId);
